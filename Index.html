@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-Day PPL Workout Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Familjen+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --ink: #1a1a18;
+    --push: #d4380d;
+    --pull: #1d6fa4;
+    --legs: #389e0d;
+    --rest: #888;
+    --card: #fff;
+    --border: #e0ddd5;
+    --accent: #f0c040;
+    --muted: #888880;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Familjen Grotesk', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 56px 32px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: 'PPL';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    font-family: var(--sans);
+    font-size: 200px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(245,242,235,0.5);
+    margin-top: 14px;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat { border-left: 2px solid var(--accent); padding-left: 12px; }
+
+  .hero-stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: rgba(245,242,235,0.45);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── WEEK STRIP ── */
+  .week-strip {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-cell {
+    padding: 16px 8px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .week-cell:last-child { border-right: none; }
+
+  .week-cell.active-cell { background: var(--ink); }
+
+  .week-cell:hover:not(.active-cell) { background: rgba(0,0,0,0.04); }
+
+  .wc-day {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .week-cell.active-cell .wc-day { color: rgba(245,242,235,0.5); }
+
+  .wc-type {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .wc-type.push { color: var(--push); }
+  .wc-type.pull { color: var(--pull); }
+  .wc-type.legs { color: var(--legs); }
+  .wc-type.rest { color: var(--rest); }
+
+  .wc-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin: 8px auto 0;
+  }
+
+  .push-dot { background: var(--push); }
+  .pull-dot { background: var(--pull); }
+  .legs-dot { background: var(--legs); }
+  .rest-dot { background: var(--border); }
+
+  /* ── NAV TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 16px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    user-select: none;
+    margin-bottom: -1px;
+  }
+
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .tab.push-tab.active { color: var(--push); border-bottom-color: var(--push); }
+  .tab.pull-tab.active { color: var(--pull); border-bottom-color: var(--pull); }
+  .tab.legs-tab.active { color: var(--legs); border-bottom-color: var(--legs); }
+
+  /* ── PANELS ── */
+  .panels { max-width: 820px; margin: 0 auto; padding: 32px 16px; }
+
+  .panel { display: none; animation: fadeIn 0.25s ease; }
+  .panel.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .panel-title-group {}
+
+  .panel-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .push-tag { background: #fff1ed; color: var(--push); }
+  .pull-tag { background: #e6f4ff; color: var(--pull); }
+  .legs-tag { background: #f0fff0; color: var(--legs); }
+
+  .panel-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .panel-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── EXERCISE ROWS ── */
+  .ex-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .ex-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    transition: box-shadow 0.15s;
+    cursor: default;
+  }
+
+  .ex-row:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); z-index: 1; position: relative; }
+
+  .ex-row-left {}
+
+  .ex-name {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .ex-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .ex-tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+
+  .ex-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .ex-row-right { text-align: right; min-width: 90px; }
+
+  .ex-sets {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .push-num { color: var(--push); }
+  .pull-num { color: var(--pull); }
+  .legs-num { color: var(--legs); }
+
+  .ex-rest {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── REST DAY PANEL ── */
+  .rest-panel {
+    text-align: center;
+    padding: 60px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+
+  .rest-emoji { font-size: 56px; margin-bottom: 16px; }
+
+  .rest-panel h2 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .rest-panel p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .rest-tips {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .rest-tip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ── RULES SECTION ── */
+  .rules {
+    max-width: 820px;
+    margin: 0 auto 0;
+    padding: 0 16px 40px;
+  }
+
+  .rules-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .rule-card {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 18px;
+  }
+
+  .rule-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .rule-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .rule-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .prog-section {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+  }
+
+  .prog-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .prog-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    width: 70px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .prog-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .prog-fill {
+    height: 100%;
+    background: var(--ink);
+    transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .prog-desc-text {
+    font-size: 12px;
+    color: var(--muted);
+    width: 200px;
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+
+  footer {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--border);
+    letter-spacing: 2px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 36px; }
+    .tabs { padding: 0 12px; }
+    .prog-desc-text { display: none; }
+    .ex-row { grid-template-columns: 1fr; }
+    .ex-row-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">6-Day Split · Beginner Program</div>
+  <h1>Push. Pull.<br><em>Legs.</em> Repeat.</h1>
+  <p class="hero-sub">Train 6 days a week without burning out. Each muscle group gets hit twice with 48h recovery built in.</p>
+  <div class="stats-row">
+    <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">Days / Week</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">45–55</div><div class="hero-stat-label">Min / Session</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">1</div><div class="hero-stat-label">Rest Day</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">12</div><div class="hero-stat-label">Weeks</div></div>
+  </div>
+</div>
+
+<!-- WEEK STRIP -->
+<div class="week-strip">
+  <div class="week-cell" data-tab="push1" onclick="selectDay(this,'push1')">
+    <div class="wc-day">Mon</div>
+    <div class="wc-type push">Push</div>
+    <div class="wc-dot push-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="pull1" onclick="selectDay(this,'pull1')">
+    <div class="wc-day">Tue</div>
+    <div class="wc-type pull">Pull</div>
+    <div class="wc-dot pull-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="legs1" onclick="selectDay(this,'legs1')">
+    <div class="wc-day">Wed</div>
+    <div class="wc-type legs">Legs</div>
+    <div class="wc-dot legs-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="push2" onclick="selectDay(this,'push2')">
+    <div class="wc-day">Thu</div>
+    <div class="wc-type push">Push</div>
+    <div class="wc-dot push-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="pull2" onclick="selectDay(this,'pull2')">
+    <div class="wc-day">Fri</div>
+    <div class="wc-type pull">Pull</div>
+    <div class="wc-dot pull-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="legs2" onclick="selectDay(this,'legs2')">
+    <div class="wc-day">Sat</div>
+    <div class="wc-type legs">Legs</div>
+    <div class="wc-dot legs-dot"></div>
+  </div>
+  <div class="week-cell" data-tab="rest" onclick="selectDay(this,'rest')">
+    <div class="wc-day">Sun</div>
+    <div class="wc-type rest">Rest</div>
+    <div class="wc-dot rest-dot"></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab push-tab active" data-panel="push1" onclick="switchTab(this)">Mon · Push A</div>
+  <div class="tab pull-tab" data-panel="pull1" onclick="switchTab(this)">Tue · Pull A</div>
+  <div class="tab legs-tab" data-panel="legs1" onclick="switchTab(this)">Wed · Legs A</div>
+  <div class="tab push-tab" data-panel="push2" onclick="switchTab(this)">Thu · Push B</div>
+  <div class="tab pull-tab" data-panel="pull2" onclick="switchTab(this)">Fri · Pull B</div>
+  <div class="tab legs-tab" data-panel="legs2" onclick="switchTab(this)">Sat · Legs B</div>
+  <div class="tab" data-panel="rest" onclick="switchTab(this)">Sun · Rest</div>
+</div>
+
+<!-- PANELS -->
+<div class="panels">
+
+  <!-- PUSH A -->
+  <div class="panel active" id="push1">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-tag push-tag">Monday · Push A</div>
+        <div class="panel-title">Chest, Shoulders & Triceps</div>
+      </div>
+      <div class="panel-meta">~50 min<br>6 exercises<br>Volume focus</div>
+    </div>
+    <div class="ex-list">
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Flat Barbell Bench Press</div><div class="ex-note">Main chest builder — control the descent, drive up explosively</div><div class="ex-tags"><span class="ex-tag">Chest</span><span class="ex-tag">Triceps</span><span class="ex-tag">Front Delts</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×8</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Seated Dumbbell Overhead Press</div><div class="ex-note">Brace your core; don't flare elbows out too wide</div><div class="ex-tags"><span class="ex-tag">Shoulders</span><span class="ex-tag">Triceps</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×10</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Incline Dumbbell Press</div><div class="ex-note">30–45° angle; upper chest emphasis</div><div class="ex-tags"><span class="ex-tag">Upper Chest</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×10</div><div class="ex-rest">75s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Cable Chest Fly</div><div class="ex-note">Squeeze hard at the peak; slow and controlled</div><div class="ex-tags"><span class="ex-tag">Chest</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×12</div><div class="ex-rest">60s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Lateral Raises</div><div class="ex-note">Light weight — no swinging; lead with the elbow</div><div class="ex-tags"><span class="ex-tag">Side Delts</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×15</div><div class="ex-rest">60s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Tricep Rope Pushdown</div><div class="ex-note">Full extension at bottom; elbows pinned to sides</div><div class="ex-tags"><span class="ex-tag">Triceps</span></div></div><div class="ex-row-right"><div class="ex-sets push-num">3×12</div><div class="ex-rest">60s rest</div></div></div>
+    </div>
+  </div>
+
+  <!-- PULL A -->
+  <div class="panel" id="pull1">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-tag pull-tag">Tuesday · Pull A</div>
+        <div class="panel-title">Back & Biceps</div>
+      </div>
+      <div class="panel-meta">~50 min<br>6 exercises<br>Volume focus</div>
+    </div>
+    <div class="ex-list">
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Lat Pulldown</div><div class="ex-note">Wide grip; pull to upper chest — not behind the neck</div><div class="ex-tags"><span class="ex-tag">Lats</span><span class="ex-tag">Biceps</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">4×10</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Seated Cable Row</div><div class="ex-note">Chest up; retract shoulder blades at the end</div><div class="ex-tags"><span class="ex-tag">Mid Back</span><span class="ex-tag">Rhomboids</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">3×10</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Single-Arm Dumbbell Row</div><div class="ex-note">Elbow drives back and up; feel the lat stretch</div><div class="ex-tags"><span class="ex-tag">Lats</span><span class="ex-tag">Rear Delts</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">3×10ea</div><div class="ex-rest">60s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Face Pulls</div><div class="ex-note">Rope at eye height; rotate wrists out at the end — great for shoulder health</div><div class="ex-tags"><span class="ex-tag">Rear Delts</span><span class="ex-tag">Rotator Cuff</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">3×15</div><div class="ex-rest">60s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Barbell Bicep Curl</div><div class="ex-note">No swinging; squeeze at the top for 1 second</div><div class="ex-tags"><span class="ex-tag">Biceps</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">3×10</div><div class="ex-rest">60s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Hammer Curl</div><div class="ex-note">Neutral grip; works the brachialis for thicker arms</div><div class="ex-tags"><span class="ex-tag">Biceps</span><span class="ex-tag">Forearms</span></div></div><div class="ex-row-right"><div class="ex-sets pull-num">3×12</div><div class="ex-rest">60s rest</div></div></div>
+    </div>
+  </div>
+
+  <!-- LEGS A -->
+  <div class="panel" id="legs1">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-tag legs-tag">Wednesday · Legs A</div>
+        <div class="panel-title">Quads, Hamstrings & Glutes</div>
+      </div>
+      <div class="panel-meta">~55 min<br>6 exercises<br>Strength focus</div>
+    </div>
+    <div class="ex-list">
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Barbell Back Squat</div><div class="ex-note">Hips below parallel; chest tall; knees track toes</div><div class="ex-tags"><span class="ex-tag">Quads</span><span class="ex-tag">Glutes</span><span class="ex-tag">Core</span></div></div><div class="ex-row-right"><div class="ex-sets legs-num">4×8</div><div class="ex-rest">2 min rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Romanian Deadlift</div><div class="ex-note">Hip hinge — push hips back, feel the hamstring stretch</div><div class="ex-tags"><span class="ex-tag">Hamstrings</span><span class="ex-tag">Glutes</span></div></div><div class="ex-row-right"><div class="ex-sets legs-num">3×10</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Leg Press</div><div class="ex-note">Feet shoulder-width; don't lock knees at the top</div><div class="ex-tags"><span class="ex-tag">Quads</span></div></div><div class="ex-row-right"><div class="ex-sets legs-num">3×12</div><div class="ex-rest">90s rest</div></div></div>
+      <div class="ex-row"><div class="ex-row-left"><div class="ex-name">Walking Lunges</div><div class="ex-note">Bodyweight first; back knee hovers just off the floor</div><div class="ex-tags"><span class="ex-tag">Quads</span><span class="ex-tag">Glutes</span></div></div><div class="ex-row-right"><div class="ex-sets legs-num">3×12ea</div><div class="ex-rest">75s rest</div></div></div>
+      <div class="ex-row"
